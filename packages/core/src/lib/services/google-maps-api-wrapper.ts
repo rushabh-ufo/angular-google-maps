@@ -17,7 +17,7 @@ export class GoogleMapsAPIWrapper {
         new Promise<google.maps.Map>((resolve: () => void) => { this._mapResolver = resolve; });
   }
 
-  createMap(el: HTMLElement, mapOptions: google.maps.MapOptions): Promise<void> {
+  createMap(el: HTMLElement, mapOptions: any): Promise<void> {
     return this._zone.runOutsideAngular(() => {
       return this._loader.load().then(() => {
         const map = new google.maps.Map(el, mapOptions);
