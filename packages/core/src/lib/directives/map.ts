@@ -344,6 +344,11 @@ export class AgmMap implements OnChanges, AfterContentInit, OnDestroy {
   @Input() restriction: google.maps.MapRestriction;
 
   /**
+   * Map ID support
+   */
+   @Input() mapId: string;
+
+  /**
    * Map option attributes that can change over time
    */
   private static _mapOptionsAttributes: string[] = [
@@ -433,7 +438,7 @@ export class AgmMap implements OnChanges, AfterContentInit, OnDestroy {
   }
 
   private _initMapInstance(el: HTMLElement) {
-    this._mapsWrapper.createMap(el, {
+    const mapOption: any = {
       center: {lat: this.latitude || 0, lng: this.longitude || 0},
       zoom: this.zoom,
       minZoom: this.minZoom,
@@ -453,7 +458,9 @@ export class AgmMap implements OnChanges, AfterContentInit, OnDestroy {
       gestureHandling: this.gestureHandling,
       tilt: this.tilt,
       restriction: this.restriction,
-    })
+    };
+    mapOption.mapId = this.mapId;
+    this._mapsWrapper.createMap(el, mapOption)
       .then(() => this._mapsWrapper.getNativeMap())
       .then(map => this.mapReady.emit(map));
 
