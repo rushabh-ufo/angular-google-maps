@@ -1,0 +1,14 @@
+import { AgmCoreModule } from '@agm/core';
+import { NgModule } from '@angular/core';
+import { AgmDrawingManager } from './directives/drawing-manager';
+import { AgmDrawingManagerTrigger } from './directives/drawing-manager-trigger';
+export class AgmDrawingModule {
+}
+AgmDrawingModule.decorators = [
+    { type: NgModule, args: [{
+                imports: [AgmCoreModule],
+                declarations: [AgmDrawingManager, AgmDrawingManagerTrigger],
+                exports: [AgmDrawingManager, AgmDrawingManagerTrigger],
+            },] }
+];
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZHJhd2luZy5tb2R1bGUuanMiLCJzb3VyY2VSb290IjoiRDovQXV0b21hdGlvbi9hbmd1bGFyLWdvb2dsZS1tYXBzL3BhY2thZ2VzL2RyYXdpbmcvc3JjLyIsInNvdXJjZXMiOlsibGliL2RyYXdpbmcubW9kdWxlLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sRUFBRSxhQUFhLEVBQUUsTUFBTSxXQUFXLENBQUM7QUFDMUMsT0FBTyxFQUFFLFFBQVEsRUFBRSxNQUFNLGVBQWUsQ0FBQztBQUN6QyxPQUFPLEVBQUUsaUJBQWlCLEVBQUUsTUFBTSw4QkFBOEIsQ0FBQztBQUNqRSxPQUFPLEVBQUUsd0JBQXdCLEVBQUUsTUFBTSxzQ0FBc0MsQ0FBQztBQU9oRixNQUFNLE9BQU8sZ0JBQWdCOzs7WUFMNUIsUUFBUSxTQUFDO2dCQUNSLE9BQU8sRUFBRSxDQUFDLGFBQWEsQ0FBQztnQkFDeEIsWUFBWSxFQUFFLENBQUMsaUJBQWlCLEVBQUUsd0JBQXdCLENBQUM7Z0JBQzNELE9BQU8sRUFBRSxDQUFDLGlCQUFpQixFQUFFLHdCQUF3QixDQUFDO2FBQ3ZEIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgQWdtQ29yZU1vZHVsZSB9IGZyb20gJ0BhZ20vY29yZSc7XHJcbmltcG9ydCB7IE5nTW9kdWxlIH0gZnJvbSAnQGFuZ3VsYXIvY29yZSc7XHJcbmltcG9ydCB7IEFnbURyYXdpbmdNYW5hZ2VyIH0gZnJvbSAnLi9kaXJlY3RpdmVzL2RyYXdpbmctbWFuYWdlcic7XHJcbmltcG9ydCB7IEFnbURyYXdpbmdNYW5hZ2VyVHJpZ2dlciB9IGZyb20gJy4vZGlyZWN0aXZlcy9kcmF3aW5nLW1hbmFnZXItdHJpZ2dlcic7XHJcblxyXG5ATmdNb2R1bGUoe1xyXG4gIGltcG9ydHM6IFtBZ21Db3JlTW9kdWxlXSxcclxuICBkZWNsYXJhdGlvbnM6IFtBZ21EcmF3aW5nTWFuYWdlciwgQWdtRHJhd2luZ01hbmFnZXJUcmlnZ2VyXSxcclxuICBleHBvcnRzOiBbQWdtRHJhd2luZ01hbmFnZXIsIEFnbURyYXdpbmdNYW5hZ2VyVHJpZ2dlcl0sXHJcbn0pXHJcbmV4cG9ydCBjbGFzcyBBZ21EcmF3aW5nTW9kdWxlIHtcclxufVxyXG4iXX0=

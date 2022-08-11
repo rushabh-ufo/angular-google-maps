@@ -1,0 +1,40 @@
+import { Injectable } from '@angular/core';
+import { bindCallback, Observable, of, ReplaySubject, throwError } from 'rxjs';
+import { map, multicast, switchMap } from 'rxjs/operators';
+import { MapsAPILoader } from './maps-api-loader/maps-api-loader';
+import * as i0 from "@angular/core";
+import * as i1 from "./maps-api-loader/maps-api-loader";
+export class AgmGeocoder {
+    constructor(loader) {
+        const connectableGeocoder$ = new Observable(subscriber => {
+            loader.load().then(() => subscriber.next());
+        })
+            .pipe(map(() => this._createGeocoder()), multicast(new ReplaySubject(1)));
+        connectableGeocoder$.connect(); // ignore the subscription
+        // since we will remain subscribed till application exits
+        this.geocoder$ = connectableGeocoder$;
+    }
+    geocode(request) {
+        return this.geocoder$.pipe(switchMap((geocoder) => this._getGoogleResults(geocoder, request)));
+    }
+    _getGoogleResults(geocoder, request) {
+        const geocodeObservable = bindCallback(geocoder.geocode);
+        return geocodeObservable(request).pipe(switchMap(([results, status]) => {
+            if (status === google.maps.GeocoderStatus.OK) {
+                return of(results);
+            }
+            return throwError(status);
+        }));
+    }
+    _createGeocoder() {
+        return new google.maps.Geocoder();
+    }
+}
+AgmGeocoder.ɵprov = i0.ɵɵdefineInjectable({ factory: function AgmGeocoder_Factory() { return new AgmGeocoder(i0.ɵɵinject(i1.MapsAPILoader)); }, token: AgmGeocoder, providedIn: "root" });
+AgmGeocoder.decorators = [
+    { type: Injectable, args: [{ providedIn: 'root' },] }
+];
+AgmGeocoder.ctorParameters = () => [
+    { type: MapsAPILoader }
+];
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZ2VvY29kZXItc2VydmljZS5qcyIsInNvdXJjZVJvb3QiOiJEOi9BdXRvbWF0aW9uL2FuZ3VsYXItZ29vZ2xlLW1hcHMvcGFja2FnZXMvY29yZS9zcmMvIiwic291cmNlcyI6WyJsaWIvc2VydmljZXMvZ2VvY29kZXItc2VydmljZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxPQUFPLEVBQUUsVUFBVSxFQUFFLE1BQU0sZUFBZSxDQUFDO0FBQzNDLE9BQU8sRUFBRSxZQUFZLEVBQXlCLFVBQVUsRUFBRSxFQUFFLEVBQUUsYUFBYSxFQUFFLFVBQVUsRUFBRSxNQUFNLE1BQU0sQ0FBQztBQUN0RyxPQUFPLEVBQUUsR0FBRyxFQUFFLFNBQVMsRUFBRSxTQUFTLEVBQUUsTUFBTSxnQkFBZ0IsQ0FBQztBQUMzRCxPQUFPLEVBQUUsYUFBYSxFQUFFLE1BQU0sbUNBQW1DLENBQUM7OztBQUdsRSxNQUFNLE9BQU8sV0FBVztJQUd0QixZQUFZLE1BQXFCO1FBQy9CLE1BQU0sb0JBQW9CLEdBQUcsSUFBSSxVQUFVLENBQUMsVUFBVSxDQUFDLEVBQUU7WUFDdkQsTUFBTSxDQUFDLElBQUksRUFBRSxDQUFDLElBQUksQ0FBQyxHQUFHLEVBQUUsQ0FBQyxVQUFVLENBQUMsSUFBSSxFQUFFLENBQUMsQ0FBQztRQUM5QyxDQUFDLENBQUM7YUFDQyxJQUFJLENBQ0gsR0FBRyxDQUFDLEdBQUcsRUFBRSxDQUFDLElBQUksQ0FBQyxlQUFlLEVBQUUsQ0FBQyxFQUNqQyxTQUFTLENBQUMsSUFBSSxhQUFhLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FDZSxDQUFDO1FBRW5ELG9CQUFvQixDQUFDLE9BQU8sRUFBRSxDQUFDLENBQUMsMEJBQTBCO1FBQzFELHlEQUF5RDtRQUV6RCxJQUFJLENBQUMsU0FBUyxHQUFHLG9CQUFvQixDQUFDO0lBQ3hDLENBQUM7SUFFRCxPQUFPLENBQUMsT0FBb0M7UUFDMUMsT0FBTyxJQUFJLENBQUMsU0FBUyxDQUFDLElBQUksQ0FDeEIsU0FBUyxDQUFDLENBQUMsUUFBUSxFQUFFLEVBQUUsQ0FBQyxJQUFJLENBQUMsaUJBQWlCLENBQUMsUUFBUSxFQUFFLE9BQU8sQ0FBQyxDQUFDLENBQ25FLENBQUM7SUFDSixDQUFDO0lBRU8saUJBQWlCLENBQUMsUUFBOEIsRUFBRSxPQUFvQztRQUU1RixNQUFNLGlCQUFpQixHQUFHLFlBQVksQ0FBQyxRQUFRLENBQUMsT0FBTyxDQUFDLENBQUM7UUFDekQsT0FBTyxpQkFBaUIsQ0FBQyxPQUFPLENBQUMsQ0FBQyxJQUFJLENBQ3BDLFNBQVMsQ0FBQyxDQUFDLENBQUMsT0FBTyxFQUFFLE1BQU0sQ0FBQyxFQUFFLEVBQUU7WUFDOUIsSUFBSSxNQUFNLEtBQUssTUFBTSxDQUFDLElBQUksQ0FBQyxjQUFjLENBQUMsRUFBRSxFQUFFO2dCQUM1QyxPQUFPLEVBQUUsQ0FBQyxPQUFPLENBQUMsQ0FBQzthQUNwQjtZQUVELE9BQU8sVUFBVSxDQUFDLE1BQU0sQ0FBQyxDQUFDO1FBQzVCLENBQUMsQ0FBQyxDQUNILENBQUM7SUFDSixDQUFDO0lBRU8sZUFBZTtRQUNyQixPQUFPLElBQUksTUFBTSxDQUFDLElBQUksQ0FBQyxRQUFRLEVBQUUsQ0FBQztJQUNwQyxDQUFDOzs7O1lBekNGLFVBQVUsU0FBQyxFQUFFLFVBQVUsRUFBRSxNQUFNLEVBQUU7OztZQUZ6QixhQUFhIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgSW5qZWN0YWJsZSB9IGZyb20gJ0Bhbmd1bGFyL2NvcmUnO1xyXG5pbXBvcnQgeyBiaW5kQ2FsbGJhY2ssIENvbm5lY3RhYmxlT2JzZXJ2YWJsZSwgT2JzZXJ2YWJsZSwgb2YsIFJlcGxheVN1YmplY3QsIHRocm93RXJyb3IgfSBmcm9tICdyeGpzJztcclxuaW1wb3J0IHsgbWFwLCBtdWx0aWNhc3QsIHN3aXRjaE1hcCB9IGZyb20gJ3J4anMvb3BlcmF0b3JzJztcclxuaW1wb3J0IHsgTWFwc0FQSUxvYWRlciB9IGZyb20gJy4vbWFwcy1hcGktbG9hZGVyL21hcHMtYXBpLWxvYWRlcic7XHJcblxyXG5ASW5qZWN0YWJsZSh7IHByb3ZpZGVkSW46ICdyb290JyB9KVxyXG5leHBvcnQgY2xhc3MgQWdtR2VvY29kZXIge1xyXG4gIHByb3RlY3RlZCByZWFkb25seSBnZW9jb2RlciQ6IE9ic2VydmFibGU8Z29vZ2xlLm1hcHMuR2VvY29kZXI+O1xyXG5cclxuICBjb25zdHJ1Y3Rvcihsb2FkZXI6IE1hcHNBUElMb2FkZXIpIHtcclxuICAgIGNvbnN0IGNvbm5lY3RhYmxlR2VvY29kZXIkID0gbmV3IE9ic2VydmFibGUoc3Vic2NyaWJlciA9PiB7XHJcbiAgICAgIGxvYWRlci5sb2FkKCkudGhlbigoKSA9PiBzdWJzY3JpYmVyLm5leHQoKSk7XHJcbiAgICB9KVxyXG4gICAgICAucGlwZShcclxuICAgICAgICBtYXAoKCkgPT4gdGhpcy5fY3JlYXRlR2VvY29kZXIoKSksXHJcbiAgICAgICAgbXVsdGljYXN0KG5ldyBSZXBsYXlTdWJqZWN0KDEpKSxcclxuICAgICAgKSBhcyBDb25uZWN0YWJsZU9ic2VydmFibGU8Z29vZ2xlLm1hcHMuR2VvY29kZXI+O1xyXG5cclxuICAgIGNvbm5lY3RhYmxlR2VvY29kZXIkLmNvbm5lY3QoKTsgLy8gaWdub3JlIHRoZSBzdWJzY3JpcHRpb25cclxuICAgIC8vIHNpbmNlIHdlIHdpbGwgcmVtYWluIHN1YnNjcmliZWQgdGlsbCBhcHBsaWNhdGlvbiBleGl0c1xyXG5cclxuICAgIHRoaXMuZ2VvY29kZXIkID0gY29ubmVjdGFibGVHZW9jb2RlciQ7XHJcbiAgfVxyXG5cclxuICBnZW9jb2RlKHJlcXVlc3Q6IGdvb2dsZS5tYXBzLkdlb2NvZGVyUmVxdWVzdCk6IE9ic2VydmFibGU8Z29vZ2xlLm1hcHMuR2VvY29kZXJSZXN1bHRbXT4ge1xyXG4gICAgcmV0dXJuIHRoaXMuZ2VvY29kZXIkLnBpcGUoXHJcbiAgICAgIHN3aXRjaE1hcCgoZ2VvY29kZXIpID0+IHRoaXMuX2dldEdvb2dsZVJlc3VsdHMoZ2VvY29kZXIsIHJlcXVlc3QpKVxyXG4gICAgKTtcclxuICB9XHJcblxyXG4gIHByaXZhdGUgX2dldEdvb2dsZVJlc3VsdHMoZ2VvY29kZXI6IGdvb2dsZS5tYXBzLkdlb2NvZGVyLCByZXF1ZXN0OiBnb29nbGUubWFwcy5HZW9jb2RlclJlcXVlc3QpOlxyXG4gICAgICAgT2JzZXJ2YWJsZTxnb29nbGUubWFwcy5HZW9jb2RlclJlc3VsdFtdPiB7XHJcbiAgICBjb25zdCBnZW9jb2RlT2JzZXJ2YWJsZSA9IGJpbmRDYWxsYmFjayhnZW9jb2Rlci5nZW9jb2RlKTtcclxuICAgIHJldHVybiBnZW9jb2RlT2JzZXJ2YWJsZShyZXF1ZXN0KS5waXBlKFxyXG4gICAgICBzd2l0Y2hNYXAoKFtyZXN1bHRzLCBzdGF0dXNdKSA9PiB7XHJcbiAgICAgICAgaWYgKHN0YXR1cyA9PT0gZ29vZ2xlLm1hcHMuR2VvY29kZXJTdGF0dXMuT0spIHtcclxuICAgICAgICAgIHJldHVybiBvZihyZXN1bHRzKTtcclxuICAgICAgICB9XHJcblxyXG4gICAgICAgIHJldHVybiB0aHJvd0Vycm9yKHN0YXR1cyk7XHJcbiAgICAgIH0pXHJcbiAgICApO1xyXG4gIH1cclxuXHJcbiAgcHJpdmF0ZSBfY3JlYXRlR2VvY29kZXIoKSB7XHJcbiAgICByZXR1cm4gbmV3IGdvb2dsZS5tYXBzLkdlb2NvZGVyKCk7XHJcbiAgfVxyXG59XHJcbiJdfQ==
