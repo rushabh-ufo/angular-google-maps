@@ -97,8 +97,8 @@ export class MarkerManager {
     return this._markers.get(marker);
   }
 
-  createEventObservable<T extends (google.maps.MouseEvent | void)>(
-      eventName: google.maps.MarkerMouseEventNames | google.maps.MarkerChangeOptionEventNames,
+  createEventObservable<T extends (any | void)>(
+      eventName: any,
       marker: AgmMarker): Observable<T> {
     return new Observable(observer => {
       this._markers.get(marker).then(m =>

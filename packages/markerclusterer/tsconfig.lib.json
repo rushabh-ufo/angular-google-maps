@@ -9,6 +9,9 @@
     "lib": [
       "dom",
       "es2018"
+    ],
+    "types": [
+      "googlemaps"
     ]
   },
   "angularCompilerOptions": {

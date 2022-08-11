@@ -346,7 +346,7 @@ export class AgmMap implements OnChanges, AfterContentInit, OnDestroy {
   /**
    * Map ID support
    */
-   @Input() mapId: string;
+   @Input() mapId: string = null;
 
   /**
    * Map option attributes that can change over time
@@ -354,7 +354,7 @@ export class AgmMap implements OnChanges, AfterContentInit, OnDestroy {
   private static _mapOptionsAttributes: string[] = [
     'disableDoubleClickZoom', 'scrollwheel', 'draggable', 'draggableCursor', 'draggingCursor',
     'keyboardShortcuts', 'styles', 'zoom', 'minZoom', 'maxZoom', 'mapTypeId', 'clickableIcons',
-    'gestureHandling', 'tilt', 'restriction',
+    'gestureHandling', 'tilt', 'restriction', 'mapId',
   ];
 
   private _observableSubscriptions: Subscription[] = [];
@@ -365,19 +365,19 @@ export class AgmMap implements OnChanges, AfterContentInit, OnDestroy {
    * marker or infoWindow).
    */
   // tslint:disable-next-line: max-line-length
-  @Output() mapClick: EventEmitter<google.maps.MouseEvent | google.maps.IconMouseEvent> = new EventEmitter<google.maps.MouseEvent | google.maps.IconMouseEvent>();
+  @Output() mapClick: EventEmitter<any | google.maps.IconMouseEvent> = new EventEmitter<any | google.maps.IconMouseEvent>();
 
   /**
    * This event emitter gets emitted when the user right-clicks on the map (but not when they click
    * on a marker or infoWindow).
    */
-  @Output() mapRightClick: EventEmitter<google.maps.MouseEvent> = new EventEmitter<google.maps.MouseEvent>();
+  @Output() mapRightClick: EventEmitter<any> = new EventEmitter<any>();
 
   /**
    * This event emitter gets emitted when the user double-clicks on the map (but not when they click
    * on a marker or infoWindow).
    */
-  @Output() mapDblClick: EventEmitter<google.maps.MouseEvent> = new EventEmitter<google.maps.MouseEvent>();
+  @Output() mapDblClick: EventEmitter<any> = new EventEmitter<any>();
 
   /**
    * This event emitter is fired when the map center changes.
@@ -459,7 +459,9 @@ export class AgmMap implements OnChanges, AfterContentInit, OnDestroy {
       tilt: this.tilt,
       restriction: this.restriction,
     };
-    mapOption.mapId = this.mapId;
+    if (this.mapId) {
+      mapOption.mapId = this.mapId;
+    }
     this._mapsWrapper.createMap(el, mapOption)
       .then(() => this._mapsWrapper.getNativeMap())
       .then(map => this.mapReady.emit(map));
@@ -652,7 +654,7 @@ export class AgmMap implements OnChanges, AfterContentInit, OnDestroy {
   }
 
   private _handleMapMouseEvents() {
-    type Event = { name: 'rightclick' | 'click' | 'dblclick', emitter: EventEmitter<google.maps.MouseEvent> };
+    type Event = { name: 'rightclick' | 'click' | 'dblclick', emitter: EventEmitter<any> };
 
     const events: Event[] = [
       {name: 'click', emitter: this.mapClick},
